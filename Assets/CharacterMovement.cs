@@ -1,40 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Vuforia;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public FixedJoystick joystick;
-    private Transform arCameraTransform; // Reference to the AR Camera's transform
 
-    void Start()
-    {
-        // Find the AR Camera in the scene
-        arCameraTransform = Camera.main.transform;
-    }
+    [SerializeField] float moveSpeed, reverseMoveSpeed, turnSpeed, gravity;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] FixedJoystick joystick;
+
+    private float speed, currentSpeed;
+    private float rotate, currentRotation;
 
     void Update()
     {
-        // Get input from the joystick
-        float horizontalInput = joystick.Horizontal;
+        transform.position = rb.transform.position;
+
         float verticalInput = joystick.Vertical;
+        float horizontalInput = joystick.Horizontal;
 
-        // Calculate the movement direction relative to the AR Camera
-        Vector3 cameraForward = arCameraTransform.forward;
-        Vector3 cameraRight = arCameraTransform.right;
+        if (verticalInput != 0)
+        {
+            speed = verticalInput > 0f ? moveSpeed : -1 * reverseMoveSpeed;
+        }
 
-        // Flatten the vectors (ignore vertical component) to ensure forward is parallel to the ground
-        cameraForward.y = 0.0f;
-        cameraRight.y = 0.0f;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
+        if (horizontalInput != 0)
+        {
+            int direction = horizontalInput > 0f ? 1 : -1;
+            float amount = Mathf.Abs(horizontalInput);
+            Steer(direction, amount);
+        }
 
-        // Calculate the desired movement direction
-        Vector3 movement = (cameraForward * verticalInput + cameraRight * horizontalInput) * moveSpeed * Time.deltaTime;
+        currentSpeed = Mathf.SmoothStep(currentSpeed, speed, 12f * Time.deltaTime);
+        speed = 0f;
+        currentRotation = Mathf.Lerp(currentRotation, rotate, 4f * Time.deltaTime);
+        rotate = 0f;
+    }
 
-        // Move the character
-        transform.Translate(movement);
+    void FixedUpdate()
+    {
+       rb.AddForce(transform.right * currentSpeed, ForceMode.Acceleration);
+       rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+       transform.eulerAngles = Vector3.Lerp(
+          transform.eulerAngles,
+          new Vector3(0f, transform.eulerAngles.y + currentRotation, 0f), 5 * Time.deltaTime);
+    }
+
+    void Steer(int direction, float amount)
+    {
+        rotate = (turnSpeed * (speed < 0f ? -1 * direction : direction)) * amount;
     }
 }
