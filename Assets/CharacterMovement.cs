@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed, reverseMoveSpeed, turnSpeed, gravity;
     [SerializeField] Rigidbody rb;
     [SerializeField] FixedJoystick joystick;
+    [SerializeField] Transform groundReference;
 
     private float speed, currentSpeed;
     private float rotate, currentRotation;
@@ -39,11 +40,14 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 downDirection = -groundReference.up; // Get the downward direction from the reference object
+        float rotationX = groundReference.eulerAngles.x;
+
        rb.AddForce(transform.right * currentSpeed, ForceMode.Acceleration);
-       rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+       rb.AddForce(downDirection * gravity, ForceMode.Acceleration);
        transform.eulerAngles = Vector3.Lerp(
           transform.eulerAngles,
-          new Vector3(0f, transform.eulerAngles.y + currentRotation, 0f), 5 * Time.deltaTime);
+          new Vector3(rotationX, transform.eulerAngles.y + currentRotation, 0f), 5 * Time.deltaTime);
     }
 
     void Steer(int direction, float amount)
