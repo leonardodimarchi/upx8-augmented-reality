@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public CustomCanvasLogger logToCanvasScript; // Reference to the LogToCanvas script
     private float logDebounceTime = 2.0f; // Debounce time in seconds
     private bool logIsDebouncing = false;
+    private bool isMobile = true;
 
 
     private float speed, currentSpeed;
@@ -19,20 +20,22 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        if (SystemInfo.deviceType != DeviceType.Handheld)
+        isMobile = SystemInfo.deviceType == DeviceType.Handheld;
+
+        if (!isMobile)
         {
             GlobalVariables.hasGround = true;
-        }
+        }      
     }
 
     void Update()
     {
-
-        if (!GlobalVariables.hasGround)
+        if (!GlobalVariables.hasGround && isMobile)
         {
             return;
         }
-        transform.position = rb.transform.position;
+
+        transform.position = new Vector3(rb.transform.position.x, transform.position.y, rb.transform.position.z);
 
         float verticalInput = joystick.Vertical;
         float horizontalInput = joystick.Horizontal;
@@ -70,12 +73,12 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (!GlobalVariables.hasGround)
+        if (!GlobalVariables.hasGround && isMobile)
         {
             return;
         }
 
-        rb.AddForce(transform.right * currentSpeed, ForceMode.Acceleration);
+        rb.AddForce(transform.forward * currentSpeed, ForceMode.Acceleration);
 
         rb.AddForce(downDirection * gravity, ForceMode.Acceleration);
 
