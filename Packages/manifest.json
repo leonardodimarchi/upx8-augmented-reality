@@ -1,6 +1,6 @@
 {
     "dependencies": {
-    "com.ptc.vuforia.engine": "file:com.ptc.vuforia.engine-10.17.4.tgz",
+    "com.ptc.vuforia.engine": "file:com.ptc.vuforia.engine-10.18.4.tgz",
     "com.unity.collab-proxy": "2.0.7",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.6",
