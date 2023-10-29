@@ -15,13 +15,12 @@ public class CustomCanvasLogger : MonoBehaviour
         public float expirationTime;
     }
 
-    void Start()
-    {
-    }
-
     void Update()
     {
-        RemoveExpiredMessages();
+        if (messageDuration > 0)
+        {
+            RemoveExpiredMessages();
+        }
         UpdateDisplayText();
     }
 
@@ -30,9 +29,20 @@ public class CustomCanvasLogger : MonoBehaviour
         var logMessage = new LogMessage
         {
             message = logString,
-            expirationTime = Time.time + messageDuration
+            expirationTime = messageDuration > 0 ? Time.time + messageDuration : 0
         };
 
+        logMessages.Add(logMessage);
+    }
+    public void ReplaceLog(string logString, string stackTrace, LogType type)
+    {
+        var logMessage = new LogMessage
+        {
+            message = logString,
+            expirationTime = messageDuration > 0 ? Time.time + messageDuration : 0
+        };
+
+        logMessages.Clear();
         logMessages.Add(logMessage);
     }
 
