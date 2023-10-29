@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
         float rotationX = groundReference.transform.eulerAngles.x;
 
         // Debounced logging
-        if (!logIsDebouncing)
+        if (!logIsDebouncing && logToCanvasScript)
         {
             logToCanvasScript.HandleLog("Y: " + rb.transform.position.y, "", LogType.Log);
             logToCanvasScript.HandleLog("DownDirection: " + downDirection, "", LogType.Log);
