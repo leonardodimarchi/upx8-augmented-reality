@@ -61,7 +61,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Vector3 downDirection = -groundReference.transform.up; // Get the downward direction from the reference object
-        float rotationX = groundReference.transform.eulerAngles.x;
 
         // Debounced logging
         if (!logIsDebouncing && logToCanvasScript)
@@ -84,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
         transform.eulerAngles = Vector3.Lerp(
           transform.eulerAngles,
-          new Vector3(rotationX, transform.eulerAngles.y + currentRotation, 0f), 5 * Time.deltaTime);
+          new Vector3(0f, transform.eulerAngles.y + currentRotation, 0f), 5 * Time.deltaTime);
     }
 
     IEnumerator DebounceCoroutine(float debounceTime)
