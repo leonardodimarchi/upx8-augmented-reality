@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviour
 
         if (!GlobalVariables.hasGround && isMobile)
         {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             return;
         }
 

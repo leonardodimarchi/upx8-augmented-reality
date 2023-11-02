@@ -3,7 +3,8 @@ using TMPro;
 
 public class FuelTankCounter : MonoBehaviour
 {
-    public TextMeshProUGUI UIText; 
+    public TextMeshProUGUI UIText;
+    public CustomSceneManager manager;
 
     private int fuelTankCount = 0;
 
@@ -17,7 +18,7 @@ public class FuelTankCounter : MonoBehaviour
 
         if (fuelTankCount == 3)
         {
-            // TODO: Finish the game
+            manager.GoToTheNextScene();
         }
     }
 }
