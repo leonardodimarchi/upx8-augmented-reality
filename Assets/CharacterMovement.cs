@@ -83,6 +83,10 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(downDirection * gravity, ForceMode.Acceleration);
 
+        Vector3 angles = transform.eulerAngles;
+        angles.x = 0;
+        transform.eulerAngles = angles;
+
         transform.eulerAngles = Vector3.Lerp(
           transform.eulerAngles,
           new Vector3(0f, transform.eulerAngles.y + currentRotation, 0f), 5 * Time.deltaTime);
